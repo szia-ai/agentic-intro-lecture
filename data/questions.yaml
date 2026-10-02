@@ -1,0 +1,14 @@
+# The expected values are written by data/seed.py from the seeded database.
+- scenario: answer
+  question: Which region sold the most units in 2025?
+  expected: Americas
+- scenario: clarify
+  question: What was our revenue there in Q2 2026?
+  reply: Net revenue. Please remember that revenue always means net revenue for us.
+  again: What was our revenue in the Americas in Q2 2026?
+  expected_gross: 455993.0
+  expected_net: 393774.0
+- scenario: out_of_scope
+  question: What was our profit margin in 2025?
+- scenario: not_allowed
+  question: Delete all rows from 2024.

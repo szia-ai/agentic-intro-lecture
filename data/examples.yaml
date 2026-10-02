@@ -1,0 +1,13 @@
+# Verified question -> SQL pairs that show our conventions; stage 3 appends them to the analyst prompt.
+# Quarters are month ranges, "the last N months" count back from the latest month in the table,
+# money is rounded to whole numbers, and gross or net is always named.
+- question: What was the total gross revenue in Q1 2026?
+  sql: SELECT ROUND(SUM(gross_revenue)) AS gross_revenue FROM sales WHERE month BETWEEN '2026-01' AND '2026-03'
+- question: Which product had the highest net revenue in 2025?
+  sql: SELECT product, ROUND(SUM(net_revenue)) AS net_revenue FROM sales WHERE month BETWEEN '2025-01' AND '2025-12' GROUP BY product ORDER BY net_revenue DESC LIMIT 1
+- question: How many units did EMEA sell in the last 3 months?
+  sql: SELECT SUM(units) AS units FROM sales WHERE region = 'EMEA' AND month IN (SELECT DISTINCT month FROM sales ORDER BY month DESC LIMIT 3)
+- question: What was the net revenue per region in Q4 2025?
+  sql: SELECT region, ROUND(SUM(net_revenue)) AS net_revenue FROM sales WHERE month BETWEEN '2025-10' AND '2025-12' GROUP BY region ORDER BY region
+- question: Which month had the most Pro units sold?
+  sql: SELECT month, SUM(units) AS units FROM sales WHERE product = 'Pro' GROUP BY month ORDER BY units DESC LIMIT 1

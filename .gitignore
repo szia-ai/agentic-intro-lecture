@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project
+uv.lock
+data/*.db
+data/memory/
+CLAUDE.local.md
+.claude/settings.local.json
+.DS_Store

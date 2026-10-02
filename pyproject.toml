@@ -19,6 +19,7 @@ dependencies = [
     "anthropic>=1.8.0",
     "mcp>=2.1.1",       # resolves inside [2.1.1, 2.2) until Strands lifts its <2.2 cap
     "pyyaml>=6.0",      # data/questions.yaml, data/examples.yaml
+    "logfire>=5.1",     # Pydantic AI tracing (notebook 02)
 ]
 
 [project.optional-dependencies]

@@ -328,14 +328,20 @@ from pydantic import BaseModel, Field
 
 
 class Answer(BaseModel):  # stage 1
-    answer: str = Field(description="The answer in one or two sentences, with the number.")
+    answer: str = Field(
+        description="The answer in one or two sentences, with the number."
+    )
     sql: str = Field(description="The SELECT statement that produced the answer.")
 
 
 class Reply(BaseModel):  # stages 2 and 3
     scenario: Literal["answer", "clarify", "out_of_scope", "not_allowed"]
-    message: str = Field(description="The answer with its number, the clarifying question, or why we cannot help.")
-    sql: str = Field(description="The SELECT that produced the answer; empty if no query was run.")
+    message: str = Field(
+        description="The answer with its number, the clarifying question, or why we cannot help."
+    )
+    sql: str = Field(
+        description="The SELECT that produced the answer; empty if no query was run."
+    )
 
 
 class Review(BaseModel):  # stage 3
@@ -348,23 +354,33 @@ class Review(BaseModel):  # stage 3
 ```python
 from typing import TypedDict
 from mcp.server.mcpserver import MCPServer
-from mcp.server.mcpserver.exceptions import ToolError   # only ToolError text reaches the model
+from mcp.server.mcpserver.exceptions import (
+    ToolError,
+)  # only ToolError text reaches the model
 
-server = MCPServer("sales-db", instructions="Read-only access to the demo `sales` table.")
+server = MCPServer(
+    "sales-db", instructions="Read-only access to the demo `sales` table."
+)
 
-class SqlResult(TypedDict):   # a TypedDict return becomes structured content; a bare dict does not
+
+class SqlResult(
+    TypedDict
+):  # a TypedDict return becomes structured content; a bare dict does not
     columns: list[str]
     rows: list[list]
     truncated: bool
 
-@server.tool()                # parentheses are required
+
+@server.tool()  # parentheses are required
 def get_schema() -> str:
     """Return the CREATE TABLE statement of the `sales` table."""
+
 
 @server.tool()
 def run_sql(query: str) -> SqlResult:
     """Run ONE read-only SELECT statement and return at most 50 rows."""
     # reject anything but a single SELECT, open the DB with ?mode=ro, fetchmany(51), raise ToolError on problems
+
 
 if __name__ == "__main__":
     server.run(transport="stdio")

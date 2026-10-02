@@ -1,0 +1,40 @@
+[project]
+name = "agentic-demo"
+version = "0.1.0"
+description = "An ask-your-data assistant in LangGraph, Pydantic AI 2 and Strands (+ AgentCore), built in three stages for teaching"
+requires-python = ">=3.13"
+dependencies = [
+    # LangChain / LangGraph 1.x; langchain[mcp] brings fastmcp 4 and mcp 2.x
+    "langchain[mcp,openai,anthropic,ollama]>=1.4.2",
+    "langgraph>=1.2.12",
+    "langgraph-checkpoint-sqlite>=3.1.1",   # SqliteSaver + SqliteStore
+    # Pydantic AI 2.x: its extras require openai>=3.19 and anthropic>=1.8
+    "pydantic-ai-slim[openai,anthropic,mcp]>=2.51.0",
+    # Strands WITHOUT [openai]/[anthropic]: those extras cap openai<3 and anthropic<1
+    "strands-agents[ollama]>=1.57.1",
+    # AgentCore SDK WITHOUT [strands-agents]: that extra caps mcp<2
+    "bedrock-agentcore>=1.23.1",
+    # Shared SDKs, stated explicitly because Strands uses them without declaring them
+    "openai>=3.19.0",
+    "anthropic>=1.8.0",
+    "mcp>=2.1.1",       # resolves inside [2.1.1, 2.2) until Strands lifts its <2.2 cap
+    "pyyaml>=6.0",      # data/questions.yaml, data/examples.yaml
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.16",
+    "ty>=0.0.84",       # type checker that the /verify check runs (see AGENTS.md)
+    "pre-commit>=4.6",
+    "pytest>=9.1",
+    "jupyterlab>=4.6",
+    "ipykernel>=7.3",
+    "python-dotenv>=1.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentic_demo"]

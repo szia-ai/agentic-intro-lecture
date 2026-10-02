@@ -4,7 +4,12 @@ Instructions for AI coding agents in this repository. People: start with README.
 
 ## Project
 
-<!-- Two or three sentences: what the repo does, its main entry point, who uses the output. -->
+Teaching demo for an internal lecture on agentic AI: an ask-your-data assistant that answers business
+questions from a small synthetic SQLite sales table through a read-only MCP server. It is built in
+LangGraph, Pydantic AI 2 and Strands Agents (plus an optional AgentCore bonus), each notebook in the same
+three stages: a basic bot, scenarios, then memory, examples and a reviewer. The notebooks are the
+deliverable, and each must be explainable in 10–15 minutes, so simplicity beats completeness.
+Full spec: `docs/brief.md`.
 
 ## Setup (uv, no lock file)
 
@@ -25,7 +30,10 @@ Instructions for AI coding agents in this repository. People: start with README.
 
 ## Layout
 
-- `src/<package>/` core code, `tests/` pytest (`tests/integration/` for SI tests), `examples/` or `notebooks/` for demos only, `docs/`, `data/` (gitignored).
+- `notebooks/` the deliverables; `src/agentic_demo/` shared models, loaders and paths; `mcp_server/` the
+  read-only MCP server; `prompts/` versioned prompts; `data/` seed script, questions and examples (the
+  generated `*.db` and `memory/` are gitignored); `tests/` pytest, `tests/integration/` SI tests;
+  `bonus/agentcore/`; `docs/brief.md`.
 
 ## Rules
 
@@ -45,4 +53,14 @@ Instructions for AI coding agents in this repository. People: start with README.
 
 ## Project notes
 
-<!-- What an agent cannot guess: data sources, required environment variables, external services, slow or flaky tests. -->
+- Use only the current APIs in `docs/brief.md`; when unsure, check the installed package, not memory.
+- Never add `strands-agents[openai|anthropic|litellm]`, `bedrock-agentcore[strands-agents]`,
+  `langchain-mcp-adapters` or `bedrock-agentcore-starter-toolkit`: they break the shared environment.
+- Notebooks use top-level `await`; never `asyncio.run(...)` or Pydantic AI's `run_sync()` in a cell.
+- Prompts live in `prompts/*.md` with a `PROMPT_VERSION` header and load through `load_prompt`;
+  output schemas are Pydantic models passed to the framework, never pasted into prompts.
+- Before handing back a notebook, run it top to bottom (`jupyter execute`) and save the outputs.
+- The local model is `qwen3:8b` on Ollama at `localhost:11434`.
+- Notebook runs need network access (model APIs, Ollama) and write Jupyter files in the home folder;
+  if the sandbox blocks this, stop and ask, and never change the sandbox settings.
+- Memory lives under `data/memory/<framework>/`; each notebook's reset cell deletes only its own folder.
